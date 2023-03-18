@@ -2,24 +2,22 @@ import jwt from 'jsonwebtoken'
 
 
 export const verifyToken = (req, res, next) => {
-    const token = req.cookies.accessToken
+    const authHeader = req.header('Authorization')
+    const token = authHeader && authHeader.split(' ')[1]
 
-    // if (!token) {
-    //     console.log(token)
-    //     return res.status(401).json({ success: false, message: 'You are not authorize' })
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'Access token not found' })
+    }
 
-    // }
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || 'your_secret')
 
-    // if token is exits then verify the token
-    jwt.verify(token, 'your_serect', (err, user) => {
-        if (err) {
-            return res.status(401).json({ success: false, message: 'token is invalid' })
-
-        }
-
-        req.user = user
+        req.userId = decoded.userId
         next()
-    })
+    } catch (error) {
+        console.log(error)
+        return res.status(403).json({ success: false, message: 'Invalid token' })
+    }
 }
 
 
