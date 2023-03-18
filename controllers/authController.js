@@ -56,7 +56,7 @@ export const login = async (req, res) => {
             {
                 id: user._id, role: user.role
             },
-            process.env.JWT_SECRET_KEY,
+            'your_serect',
             { expiresIn: "15d" }
         )
 

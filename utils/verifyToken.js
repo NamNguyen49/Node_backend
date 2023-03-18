@@ -11,7 +11,7 @@ export const verifyToken = (req, res, next) => {
     // }
 
     // if token is exits then verify the token
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+    jwt.verify(token, 'your_serect', (err, user) => {
         if (err) {
             return res.status(401).json({ success: false, message: 'token is invalid' })
 
